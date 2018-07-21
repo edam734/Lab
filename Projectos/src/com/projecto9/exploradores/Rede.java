@@ -248,17 +248,13 @@ public class Rede {
 	Position<Character> leftChild = tree.leftChildOf(p);
 	Position<Character> rightChild = tree.rightChildOf(p);
 
-	if (leftChild == null) {
-	    sb.append("");
-	} else {
+	if (leftChild != null) {
 	    sb.append(leftChild.getElement());
 	    sb.append("(");
 	    sb.append(imprimeNode(leftChild));
 	    sb.append(")");
 	}
-	if (rightChild == null) {
-	    sb.append("");
-	} else {
+	if (rightChild != null) {
 	    sb.append(rightChild.getElement());
 	    sb.append("(");
 	    sb.append(imprimeNode(rightChild));
