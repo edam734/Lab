@@ -1,4 +1,4 @@
-package calculadora;
+package com.projecto5.calculadora;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
