@@ -4,6 +4,8 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
+import com.projecto5.calculadora.exceptions.ParenthesisBalanceErrorException;
+
 public class CalculadoraSufixa {
 
 	private static final String OPERADORES_MATEMATICOS = "+-*/";
@@ -17,27 +19,31 @@ public class CalculadoraSufixa {
 	}
 
 	/**
-	 * Verifica se o número de parêntesis abertos é igual ao número de parêntesis
+	 * Verifica se o nÃºmero de parÃªntesis abertos Ã© igual ao nÃºmero de parÃªntesis
 	 * fechados
 	 * 
 	 * @param infixa
-	 *            A expressão algébrica na notação infixa
-	 * @return true se o número de parêntesis abertos é igual ao número de
-	 *         parêntesis fechados
+	 *            A expressÃ£o algÃ©brica na notaÃ§Ã£o infixa
+	 * @return true se o nÃºmero de parÃªntesis abertos Ã© igual ao nÃºmero de
+	 *         parÃªntesis fechados
 	 */
 	public boolean verificaParentesis(String infixa) {
 		return quantasOcorrencias(infixa, "(") == quantasOcorrencias(infixa, ")");
 	}
 
 	/**
-	 * Devolve a expressão infixa na notação sufixa
+	 * Devolve a expressÃ£o infixa na notaÃ§Ã£o sufixa
 	 * 
 	 * @param infixa
-	 *            A expressão algébrica na notação infixa
-	 * @return a expressão infixa na notação sufixa
+	 *            A expressÃ£o algÃ©brica na notaÃ§Ã£o infixa
+	 * @return a expressÃ£o infixa na notaÃ§Ã£o sufixa
 	 */
-	public String paraSufixa(String infixa) {
+	public String paraSufixa(String infixa) throws ParenthesisBalanceErrorException {
 		clean();
+
+		if (!verificaParentesis(infixa)) {
+			throw new ParenthesisBalanceErrorException("NÃºmero de parÃªnteses nÃ£o Ã© coincidente");
+		}
 		StringTokenizer tokenizer = new StringTokenizer(infixa, " ");
 		while (tokenizer.hasMoreTokens()) {
 			String token = tokenizer.nextToken();
@@ -66,7 +72,7 @@ public class CalculadoraSufixa {
 	}
 
 	/**
-	 * Processa um token de uma expressão algébrica na notação sufixa.
+	 * Processa um token de uma expressÃ£o algÃ©brica na notaÃ§Ã£o sufixa.
 	 * 
 	 * @param token
 	 *            um token
@@ -114,9 +120,9 @@ public class CalculadoraSufixa {
 	}
 
 	/**
-	 * Devolve o resultado da expressão aritmética processada
+	 * Devolve o resultado da expressÃ£o aritmÃ©tica processada
 	 */
-	public double verResultado() {
+	public double resultado() {
 		double acumulado = -1;
 
 		StringTokenizer tokenizer = new StringTokenizer(sufixa(), " ");
@@ -137,6 +143,23 @@ public class CalculadoraSufixa {
 		return acumulado;
 	}
 
+	public String imprimeResultado(String infixa) {
+		String input = "";
+		try {
+			input = paraSufixa(infixa);
+		} catch (ParenthesisBalanceErrorException e) {
+			return e.getMessage();
+		}
+
+		try {
+			return input + "? " + resultado();
+		} catch (ArithmeticException e) {
+			return input + "? " + e.getMessage();
+		} catch (java.util.NoSuchElementException e) {
+			return input + "? " + "Argumentos insuficientes";
+		}
+	}
+
 	/*
 	 * Faz uma operacao matematica entre dois operandos v1 e v2
 	 */
@@ -148,6 +171,9 @@ public class CalculadoraSufixa {
 		} else if (operador.equals("*")) {
 			return v1 * v2;
 		} else {
+			if (Double.valueOf(v2).equals(0d)) {
+				throw new ArithmeticException("DivisÃ£o por zero");
+			}
 			return v1 / v2;
 		}
 	}
@@ -194,12 +220,12 @@ public class CalculadoraSufixa {
 
 	/**
 	 * Compara dois operandos especificados e retorna um inteiro que indica sua
-	 * posição relativa na ordem de classificação.
+	 * posiÃ§Ã£o relativa na ordem de classificaÃ§Ã£o.
 	 * <p>
 	 * Menor de zero: o primeiro operador tem uma prioridade menor do que o segundo
 	 * operador
 	 * <p>
-	 * Zero: ambos os operadores têm a mesma prioridade
+	 * Zero: ambos os operadores tÃªm a mesma prioridade
 	 * <p>
 	 * Maior que zero: o primeiro operador tem maior prioridade do que o segundo
 	 * operador
@@ -228,13 +254,17 @@ public class CalculadoraSufixa {
 
 	public static void main(String[] args) {
 		CalculadoraSufixa cs = new CalculadoraSufixa();
-		System.out.println(cs.paraSufixa("1 + 2") + "? " + cs.verResultado());
-		System.out.println(cs.paraSufixa("2 * ( 3 + 2.5 )") + "? " + cs.verResultado());
-		System.out.println(cs.paraSufixa("5 / ( 8 / 4 )") + "? " + cs.verResultado());
-		System.out.println(cs.paraSufixa("( 5 / ( 3 - 1 )") + cs.verResultado());
-		System.out.println(cs.paraSufixa("9 / ( 2 - 2 )") + cs.verResultado());
-		System.out.println(cs.paraSufixa("1 +") + cs.verResultado());
-		System.out.println(cs.paraSufixa("1 2") + cs.verResultado());
+		try {
+			System.out.println(cs.imprimeResultado("1 + 2"));
+			System.out.println(cs.imprimeResultado("2 * ( 3 + 2.5 )"));
+			System.out.println(cs.imprimeResultado("5 / ( 8 / 4 )"));
+			System.out.println(cs.imprimeResultado("( 5 / ( 3 - 1 )"));
+			System.out.println(cs.imprimeResultado("9 / ( 2 - 2 )"));
+			System.out.println(cs.imprimeResultado("1 +"));
+			System.out.println(cs.imprimeResultado("1 2"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
