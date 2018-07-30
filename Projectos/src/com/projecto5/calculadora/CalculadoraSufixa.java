@@ -143,16 +143,13 @@ public class CalculadoraSufixa {
 		return acumulado;
 	}
 
-	public String imprimeResultado(String infixa) {
+	public String verResultado(String infixa) {
 		String input = "";
 		try {
 			input = paraSufixa(infixa);
+			return input + "? " + resultado();
 		} catch (ParenthesisBalanceErrorException e) {
 			return e.getMessage();
-		}
-
-		try {
-			return input + "? " + resultado();
 		} catch (ArithmeticException e) {
 			return input + "? " + e.getMessage();
 		} catch (java.util.NoSuchElementException e) {
@@ -255,13 +252,13 @@ public class CalculadoraSufixa {
 	public static void main(String[] args) {
 		CalculadoraSufixa cs = new CalculadoraSufixa();
 		
-		System.out.println(cs.imprimeResultado("1 + 2"));
-		System.out.println(cs.imprimeResultado("2 * ( 3 + 2.5 )"));
-		System.out.println(cs.imprimeResultado("5 / ( 8 / 4 )"));
-		System.out.println(cs.imprimeResultado("( 5 / ( 3 - 1 )"));
-		System.out.println(cs.imprimeResultado("9 / ( 2 - 2 )"));
-		System.out.println(cs.imprimeResultado("1 +"));
-		System.out.println(cs.imprimeResultado("1 2"));
+		System.out.println(cs.verResultado("1 + 2"));
+		System.out.println(cs.verResultado("2 * ( 3 + 2.5 )"));
+		System.out.println(cs.verResultado("5 / ( 8 / 4 )"));
+		System.out.println(cs.verResultado("( 5 / ( 3 - 1 )"));
+		System.out.println(cs.verResultado("9 / ( 2 - 2 )"));
+		System.out.println(cs.verResultado("1 +"));
+		System.out.println(cs.verResultado("1 2"));
 	}
 
 }
