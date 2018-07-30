@@ -254,17 +254,14 @@ public class CalculadoraSufixa {
 
 	public static void main(String[] args) {
 		CalculadoraSufixa cs = new CalculadoraSufixa();
-		try {
-			System.out.println(cs.imprimeResultado("1 + 2"));
-			System.out.println(cs.imprimeResultado("2 * ( 3 + 2.5 )"));
-			System.out.println(cs.imprimeResultado("5 / ( 8 / 4 )"));
-			System.out.println(cs.imprimeResultado("( 5 / ( 3 - 1 )"));
-			System.out.println(cs.imprimeResultado("9 / ( 2 - 2 )"));
-			System.out.println(cs.imprimeResultado("1 +"));
-			System.out.println(cs.imprimeResultado("1 2"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		
+		System.out.println(cs.imprimeResultado("1 + 2"));
+		System.out.println(cs.imprimeResultado("2 * ( 3 + 2.5 )"));
+		System.out.println(cs.imprimeResultado("5 / ( 8 / 4 )"));
+		System.out.println(cs.imprimeResultado("( 5 / ( 3 - 1 )"));
+		System.out.println(cs.imprimeResultado("9 / ( 2 - 2 )"));
+		System.out.println(cs.imprimeResultado("1 +"));
+		System.out.println(cs.imprimeResultado("1 2"));
 	}
 
 }
