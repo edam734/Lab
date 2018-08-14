@@ -4,12 +4,12 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.StringTokenizer;
 
-import com.projecto5.calculadora.exceptions.ParenthesisBalanceErrorException;
+import com.projecto5.calculadora.exceptions.UnbalancedParenthesisException;
 
 public class CalculadoraSufixa {
 
 	private static final String OPERADORES_MATEMATICOS = "+-*/";
-
+ 
 	private Deque<String> pilha;
 	private StringBuilder sufixa;
 
@@ -38,11 +38,11 @@ public class CalculadoraSufixa {
 	 *            A expressão algébrica na notação infixa
 	 * @return a expressão infixa na notação sufixa
 	 */
-	public String paraSufixa(String infixa) throws ParenthesisBalanceErrorException {
+	public String paraSufixa(String infixa) throws UnbalancedParenthesisException {
 		clean();
 
 		if (!verificaParentesis(infixa)) {
-			throw new ParenthesisBalanceErrorException("Número de parênteses não é coincidente");
+			throw new UnbalancedParenthesisException("Número de parênteses não é coincidente");
 		}
 		StringTokenizer tokenizer = new StringTokenizer(infixa, " ");
 		while (tokenizer.hasMoreTokens()) {
@@ -148,7 +148,7 @@ public class CalculadoraSufixa {
 		try {
 			input = paraSufixa(infixa);
 			return input + "? " + resultado();
-		} catch (ParenthesisBalanceErrorException e) {
+		} catch (UnbalancedParenthesisException e) {
 			return e.getMessage();
 		} catch (ArithmeticException e) {
 			return input + "? " + e.getMessage();
