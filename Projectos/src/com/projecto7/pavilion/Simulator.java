@@ -11,16 +11,8 @@ import java.util.Random;
  */
 public class Simulator {
 
-	public static void main(String[] args) {
-
-		int nPortas = 24;
-		int compMax = 200;
-		int compMin = 100;
-		int taxaEntrada = 77;
-//		int nPortas = 6;
-//		int compMax = 20;
-//		int compMin = 10;
-//		int taxaEntrada = 15;
+	public static void doSimulation(int nPortas, int compMax, int compMin, int taxaEntrada,
+			int totalEsperados, int mediaEvento) {
 
 		Pavilion pavillion = new Pavilion(nPortas, compMax, compMin, taxaEntrada);
 
@@ -30,10 +22,6 @@ public class Simulator {
 				pavillion.sempreAberta(p);
 			}
 		}
-		int totalEsperados = 90000;
-//		int totalEsperados = 2000;
-		int mediaEvento = 900;
-//		int mediaEvento = 20;
 		int nEspectadores = 0;
 		int lambda = 0;
 		int diagnostico = 0;
