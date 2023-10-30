@@ -40,6 +40,7 @@ public class Pavilion {
 	 *                    porta de acesso em cada instante de tempo
 	 */
 	public void reIniciaSimulacao(int compMax, int compMin, int taxaEntrada) {
+		// TODO
 	}
 
 	/**
