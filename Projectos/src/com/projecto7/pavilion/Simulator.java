@@ -1,4 +1,4 @@
-package com.projecto7.pavillion;
+package com.projecto7.pavilion;
 
 import net.datastructures.ArrayQueue;
 import java.util.Random;
@@ -23,7 +23,7 @@ public class Simulator {
 //		int compMin = 10;
 //		int taxaEntrada = 2;
 
-		Pavillion pavillion = new Pavillion(nPortas, compMax, compMin, taxaEntrada);
+		Pavilion pavillion = new Pavilion(nPortas, compMax, compMin, taxaEntrada);
 
 		// abre as portas que deverão estar sempre abertas
 		for (int p = 0; p < nPortas; p++) {

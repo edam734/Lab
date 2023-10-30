@@ -1,10 +1,8 @@
-package com.projecto7.pavillion;
-
-import java.util.Iterator;
+package com.projecto7.pavilion;
 
 import net.datastructures.ArrayQueue;
 
-public class Pavillion {
+public class Pavilion {
 
 	private Porta[] portas;
 	private int instanteActual;
@@ -21,7 +19,7 @@ public class Pavillion {
 	 * @param taxaEntrada o número de espectadores que entram no pavilhão por uma
 	 *                    porta de acesso em cada instante de tempo
 	 */
-	public Pavillion(int nPortas, int compMax, int compMin, int taxaEntrada) {
+	public Pavilion(int nPortas, int compMax, int compMin, int taxaEntrada) {
 		this.compMax = compMax;
 		this.compMin = compMin;
 		this.taxaEntrada = taxaEntrada;
