@@ -1,6 +1,5 @@
 package com.projecto7.pavilion;
 
-import net.datastructures.ArrayQueue;
 import java.util.Random;
 
 /**
@@ -21,11 +20,11 @@ public class Simulator {
 //		int nPortas = 6;
 //		int compMax = 20;
 //		int compMin = 10;
-//		int taxaEntrada = 2;
+//		int taxaEntrada = 15;
 
 		Pavilion pavillion = new Pavilion(nPortas, compMax, compMin, taxaEntrada);
 
-		// abre as portas que dever�o estar sempre abertas
+		// abre as portas que deverão estar sempre abertas
 		for (int p = 0; p < nPortas; p++) {
 			if (eSempreAberta(p)) {
 				pavillion.sempreAberta(p);
@@ -33,12 +32,14 @@ public class Simulator {
 		}
 		int totalEsperados = 90000;
 //		int totalEsperados = 2000;
+		int mediaEvento = 900;
+//		int mediaEvento = 20;
 		int nEspectadores = 0;
 		int lambda = 0;
 		int diagnostico = 0;
 
 		while (pavillion.instanteActual() <= 60) {
-			lambda = calcLambda(totalEsperados, pavillion.instanteActual());
+			lambda = calcLambda(totalEsperados, mediaEvento, pavillion.instanteActual());
 			nEspectadores = poissonRandomizer(lambda);
 			System.out.println("num espectadores: " + nEspectadores);
 
@@ -56,10 +57,16 @@ public class Simulator {
 	}
 
 	/**
-	 * Gera valores aleat�rios duma distribui��o de Poisson.
+	 * Gera valores aleatórios duma distribuição de Poisson.
 	 * 
-	 * @param lambda o par�metro da distribui��o
-	 * @return um valor aleat�rio segundo uma distribui��o de Poisson
+	 * wiki: "Na teoria da probabilidade e na estatística, a distribuição de Poisson
+	 * é uma distribuição de probabilidade discreta que expressa a probabilidade de
+	 * um determinado número de eventos ocorrer em um intervalo fixo de tempo ou
+	 * espaço se esses eventos ocorrerem com uma taxa média constante conhecida e
+	 * independentemente do tempo desde o último evento."
+	 * 
+	 * @param lambda o parâmetro da distribuição
+	 * @return um valor aleatório segundo uma distribuição de Poisson
 	 */
 	private static int poissonRandomizer(int lambda) {
 
@@ -75,12 +82,18 @@ public class Simulator {
 	}
 
 	/**
-	 * Devolve o par�metro lambda da distribui��o.
+	 * Devolve o parâmetro lambda da distribuição.
 	 * 
-	 * @return o par�metro lambda da distribui��o
+	 * wiki: "λ é um número real, igual ao número esperado de ocorrências que
+	 * ocorrem num dado intervalo de tempo. Por exemplo, se o evento ocorre a uma
+	 * média de 4 minutos, e estamos interessados no número de eventos que ocorrem
+	 * num intervalo de 10 minutos, usaríamos como modelo a distribuição de Poisson
+	 * com λ=10/4= 2.5."
+	 * 
+	 * @return o parâmetro lambda da distribuição
 	 */
-	private static int calcLambda(int totalExpected, int instant) {
-		int beta = totalExpected / 900; /*20;*/
+	private static int calcLambda(int totalExpected, int mediaEvento, int instant) {
+		int beta = totalExpected / mediaEvento;
 		if (instant > 0 && instant <= 30) {
 			return beta * instant;
 		} else if (instant > 30 && instant <= 60) {
@@ -91,10 +104,10 @@ public class Simulator {
 	}
 
 	/**
-	 * Verifica se � uma porta aberta.
+	 * Verifica se é uma porta aberta.
 	 * 
 	 * @param porta a analizar
-	 * @return verdadeiro se � uma porta sempre aberta
+	 * @return verdadeiro se é uma porta sempre aberta
 	 */
 	private static boolean eSempreAberta(int porta) {
 		return porta == 0 || porta == 5 || porta == 11 || porta == 17 || porta == 23;
