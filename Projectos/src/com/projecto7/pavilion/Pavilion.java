@@ -2,6 +2,18 @@ package com.projecto7.pavilion;
 
 import net.datastructures.ArrayQueue;
 
+/**
+ * Já não tenho posse do enunciado deste projecto, sendo que agora esta classe
+ * só pôde ter sido criada com base no código que tinha de há muito tempo atrás.
+ * O javadoc foi mantido e algum dele não está correto. As assinaturas dos
+ * métodos também foram mantidas, mas algumas alteradas para encaixar no que eu
+ * julgo que era para fazer. Alguns métodos simplesmente não foram implementados
+ * e outros não são usados.
+ * 
+ * @author Eduardo
+ * @date 30/10/2023
+ *
+ */
 public class Pavilion {
 
 	private Porta[] portas;
@@ -192,7 +204,7 @@ public class Pavilion {
 		int diagnostico = 0;
 		int portasCheias = 0;
 		boolean sobrelotou = false;
-		
+
 		// 1. Coloca cada um dos nEspectadores na cauda de uma fila de espera de uma
 		// porta de acesso
 		while (nEspectadores > 0 && !sobrelotou) {
