@@ -5,7 +5,11 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="lib" path="C:/Users/Eduardo/Dropbox/Mesa de Trabalho/Ciência da Computação/JARs/LinkedBinaryTree.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Eduardo/Dropbox/Mesa de Trabalho/Ciência da Computação/JARs/net-datastructures-6-0.jar"/>
-	<classpathentry kind="lib" path="classes"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
+	<classpathentry kind="lib" path="lib/LabPImage.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Users/Eduardo/lab2-workspace/Lab/Projectos/docs/LabPImage/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
