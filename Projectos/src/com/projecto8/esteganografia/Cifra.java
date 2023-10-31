@@ -12,10 +12,16 @@ import edu.faculty.provided.LabPImage;
  */
 public class Cifra {
 
+	public static final String OUTPUT_FOLDER = "outputs\\projecto8\\";
+
 	public static void main(String[] args) throws IOException {
 		Cifra c = new Cifra();
 		LabPImage lpi = c.geraFigura();
-		c.escreveImagem(lpi, "outputs\\projecto8\\testeImagem8.png");
+		String filename = "testeImagem15.png";
+		c.escreveImagem(lpi, OUTPUT_FOLDER + filename);
+		c.cifraImagem(lpi, "10Kg de batatas e uma caixa de morangos", "1234",
+				OUTPUT_FOLDER + filename);
+		c.escreveImagem(lpi, OUTPUT_FOLDER + "Cif_" + filename);
 	}
 
 	private int generateRandomInt(Random rn, int max, int min) {
@@ -121,12 +127,75 @@ public class Cifra {
 	 * este método quando aplicado sobre a imagem cifrada, com os mesmos parâmetros
 	 * que foram usados na cifra inicial, decifra a imagem.
 	 * 
+	 * @param lpi      contém a imagem gerada
 	 * @param mensagem
 	 * @param cifra
 	 * @param filename
 	 */
-	public void cifraImagem(String mensagem, String cifra, String filename) {
+	public void cifraImagem(LabPImage lpi, String message, String cifra, String filename) {
+		String msg = cifra + message + cifra;
+		byte[] msgBytes = msg.getBytes();
 
+		Random rn = new Random();
+		int column = generateRandomInt(rn, 499, 0);
+
+		int line = -1;
+		boolean retry = false;
+		do {
+			line = generateRandomInt(rn, 499, 0);
+			if (line + msgBytes.length > 500) {
+				retry = true;
+			}
+		} while (retry);
+
+		escreveMensagem(lpi, msgBytes, column, line);
+
+		int red = -1;
+		int green = -1;
+		int blue = -1;
+
+		Random generator = new Random(Integer.valueOf(cifra));
+
+		// cifra agora a imagem toda
+		for (int l = 0; l < lpi.getHeight(); l++) {
+			for (int c = 0; c < lpi.getWidth(); c++) {
+				red = lpi.getPixelRed(c, l);
+				green = lpi.getPixelGreen(c, l);
+				blue = lpi.getPixelBlue(c, l);
+				if (isPixelWithMessage(c, l, column, line, msgBytes.length)) {
+					green ^= generateRandomInt(generator, 255, 0);
+					blue ^= generateRandomInt(generator, 255, 0);
+					lpi.setPixelRGB(c, l, red, green, blue);
+				} else {
+					red ^= generateRandomInt(generator, 255, 0);
+					green ^= generateRandomInt(generator, 255, 0);
+					blue ^= generateRandomInt(generator, 255, 0);
+					lpi.setPixelRGB(c, l, red, green, blue);
+				}
+			}
+		}
+
+	}
+
+	/*
+	 * Escreve a mensagem na imagem que está presente no objecto lpi.
+	 */
+	private void escreveMensagem(LabPImage lpi, byte[] msgBytes, int column, int line) {
+		int red = -1;
+		int green = -1;
+		int blue = -1;
+		for (int i = 0; i < msgBytes.length; i++) {
+			red = lpi.getPixelRed(column, line);
+			green = lpi.getPixelGreen(column, line);
+			blue = lpi.getPixelBlue(column, line);
+			lpi.setPixelRGB(column, line, red ^ msgBytes[i], green, blue);
+			line++;
+		}
+
+	}
+
+	private boolean isPixelWithMessage(int x, int y, int c, int l, int length) {
+		return y >= l && y + length <= l && x == c;
 	}
 
 	/**

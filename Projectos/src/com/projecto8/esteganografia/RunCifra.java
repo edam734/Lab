@@ -1,7 +1,7 @@
 package com.projecto8.esteganografia;
 
 public class RunCifra {
-
+	
 	/**
 	 * Pede a mensagem a cifrar, a chave de cifra e o nome do ficheiro onde será
 	 * gravada a imagem não cifrada. Promove o desenho da imagem não cifrada, com os
