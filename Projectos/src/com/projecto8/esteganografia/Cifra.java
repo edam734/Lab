@@ -17,11 +17,13 @@ public class Cifra {
 	public static void main(String[] args) throws IOException {
 		Cifra c = new Cifra();
 		LabPImage lpi = c.geraFigura();
-		String filename = "testeImagem15.png";
+		String filename = "testeImagem18.png";
 		c.escreveImagem(lpi, OUTPUT_FOLDER + filename);
-		c.cifraImagem(lpi, "10Kg de batatas e uma caixa de morangos", "1234",
+		lpi = c.cifraImagem(lpi, "10Kg de batatas e uma caixa de morangos", "1234",
 				OUTPUT_FOLDER + filename);
 		c.escreveImagem(lpi, OUTPUT_FOLDER + "Cif_" + filename);
+		lpi = c.decifraImagem("1234", OUTPUT_FOLDER + "Cif_" + filename);
+		c.escreveImagem(lpi, OUTPUT_FOLDER + "Decif_" + filename);
 	}
 
 	private int generateRandomInt(Random rn, int max, int min) {
@@ -132,7 +134,7 @@ public class Cifra {
 	 * @param cifra
 	 * @param filename
 	 */
-	public void cifraImagem(LabPImage lpi, String message, String cifra, String filename) {
+	public LabPImage cifraImagem(LabPImage lpi, String message, String cifra, String filename) {
 		String msg = cifra + message + cifra;
 		byte[] msgBytes = msg.getBytes();
 
@@ -150,31 +152,27 @@ public class Cifra {
 
 		escreveMensagem(lpi, msgBytes, column, line);
 
+		// cifra agora a imagem toda
+		scanCifrador(lpi, cifra);
+		return lpi;
+	}
+
+	private void scanCifrador(LabPImage lpi, String cifra) {
 		int red = -1;
 		int green = -1;
 		int blue = -1;
-
 		Random generator = new Random(Integer.valueOf(cifra));
-
-		// cifra agora a imagem toda
 		for (int l = 0; l < lpi.getHeight(); l++) {
 			for (int c = 0; c < lpi.getWidth(); c++) {
 				red = lpi.getPixelRed(c, l);
 				green = lpi.getPixelGreen(c, l);
 				blue = lpi.getPixelBlue(c, l);
-				if (isPixelWithMessage(c, l, column, line, msgBytes.length)) {
-					green ^= generateRandomInt(generator, 255, 0);
-					blue ^= generateRandomInt(generator, 255, 0);
-					lpi.setPixelRGB(c, l, red, green, blue);
-				} else {
-					red ^= generateRandomInt(generator, 255, 0);
-					green ^= generateRandomInt(generator, 255, 0);
-					blue ^= generateRandomInt(generator, 255, 0);
-					lpi.setPixelRGB(c, l, red, green, blue);
-				}
+				red ^= generateRandomInt(generator, 255, 0);
+				green ^= generateRandomInt(generator, 255, 0);
+				blue ^= generateRandomInt(generator, 255, 0);
+				lpi.setPixelRGB(c, l, red, green, blue);
 			}
 		}
-
 	}
 
 	/*
@@ -191,11 +189,13 @@ public class Cifra {
 			lpi.setPixelRGB(column, line, red ^ msgBytes[i], green, blue);
 			line++;
 		}
-
 	}
 
-	private boolean isPixelWithMessage(int x, int y, int c, int l, int length) {
-		return y >= l && y + length <= l && x == c;
+	public LabPImage decifraImagem(/* LabPImage lpi, */String cifra, String filename)
+			throws IOException {
+		LabPImage lpi = new LabPImage(filename);
+		scanCifrador(lpi, cifra);
+		return lpi;
 	}
 
 	/**
