@@ -12,21 +12,21 @@ import edu.faculty.provided.LabPImage;
  */
 public class Cifra {
 
-	public static final String OUTPUT_FOLDER = "outputs\\projecto8\\";
-
-	public static void main(String[] args) throws IOException {
-		Cifra c = new Cifra();
-		LabPImage lpi = c.geraFigura();
-		String filename = "testeImagem21.png";
-		c.escreveImagem(lpi, OUTPUT_FOLDER + filename);
-		lpi = c.cifraImagem(lpi, "10Kg de batatas e uma caixa de morangos", "1234",
-				OUTPUT_FOLDER + filename);
-		c.escreveImagem(lpi, OUTPUT_FOLDER + "Cif_" + filename);
-		LabPImage lpi2 = c.decifraImagem("1234", OUTPUT_FOLDER + "Cif_" + filename);
-		c.escreveImagem(lpi2, OUTPUT_FOLDER + "Decif_" + filename);
-		String mensagem = c.decifraMensagem(lpi2, "1234");
-		System.out.println("A mensagem cifrada é = '" + mensagem + "'");
-	}
+//	public static final String OUTPUT_FOLDER = "outputs\\projecto8\\";
+//
+//	public static void main(String[] args) throws IOException {
+//		Cifra c = new Cifra();
+//		LabPImage lpi = c.geraFigura();
+//		String filename = "testeImagem21.png";
+//		c.escreveImagem(lpi, OUTPUT_FOLDER + filename);
+//		lpi = c.cifraImagem(lpi, "10Kg de batatas e uma caixa de morangos", "1234",
+//				OUTPUT_FOLDER + filename);
+//		c.escreveImagem(lpi, OUTPUT_FOLDER + "Cif_" + filename);
+//		LabPImage lpi2 = c.decifraImagem("1234", OUTPUT_FOLDER + "Cif_" + filename);
+//		c.escreveImagem(lpi2, OUTPUT_FOLDER + "Decif_" + filename);
+//		String mensagem = c.decifraMensagem(lpi2, "1234");
+//		System.out.println("A mensagem cifrada é = '" + mensagem + "'");
+//	}
 
 	private int generateRandomInt(Random rn, int max, int min) {
 		int num = rn.nextInt(max - min + 1) + min;
