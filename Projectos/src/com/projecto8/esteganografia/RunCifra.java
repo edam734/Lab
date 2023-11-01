@@ -2,6 +2,12 @@ package com.projecto8.esteganografia;
 
 public class RunCifra {
 	
+	public static void main(String[] args) {
+		byte x = (byte)128 ^ (byte)2;
+		System.out.println(x);
+		System.out.println((byte)-126^ (byte)2);
+	}
+	
 	/**
 	 * Pede a mensagem a cifrar, a chave de cifra e o nome do ficheiro onde será
 	 * gravada a imagem não cifrada. Promove o desenho da imagem não cifrada, com os

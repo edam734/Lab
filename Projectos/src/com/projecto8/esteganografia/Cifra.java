@@ -17,13 +17,15 @@ public class Cifra {
 	public static void main(String[] args) throws IOException {
 		Cifra c = new Cifra();
 		LabPImage lpi = c.geraFigura();
-		String filename = "testeImagem18.png";
+		String filename = "testeImagem21.png";
 		c.escreveImagem(lpi, OUTPUT_FOLDER + filename);
 		lpi = c.cifraImagem(lpi, "10Kg de batatas e uma caixa de morangos", "1234",
 				OUTPUT_FOLDER + filename);
 		c.escreveImagem(lpi, OUTPUT_FOLDER + "Cif_" + filename);
-		lpi = c.decifraImagem("1234", OUTPUT_FOLDER + "Cif_" + filename);
-		c.escreveImagem(lpi, OUTPUT_FOLDER + "Decif_" + filename);
+		LabPImage lpi2 = c.decifraImagem("1234", OUTPUT_FOLDER + "Cif_" + filename);
+		c.escreveImagem(lpi2, OUTPUT_FOLDER + "Decif_" + filename);
+		String mensagem = c.decifraMensagem(lpi2, "1234");
+		System.out.println("A mensagem cifrada é = '" + mensagem + "'");
 	}
 
 	private int generateRandomInt(Random rn, int max, int min) {
@@ -153,11 +155,15 @@ public class Cifra {
 		escreveMensagem(lpi, msgBytes, column, line);
 
 		// cifra agora a imagem toda
-		scanCifrador(lpi, cifra);
+		aplicaCifra(lpi, cifra);
 		return lpi;
 	}
 
-	private void scanCifrador(LabPImage lpi, String cifra) {
+	/*
+	 * Cifra toda a imagem, aplicando o XOR em todas as componentes das cores dos
+	 * pixeis.
+	 */
+	private void aplicaCifra(LabPImage lpi, String cifra) {
 		int red = -1;
 		int green = -1;
 		int blue = -1;
@@ -179,22 +185,29 @@ public class Cifra {
 	 * Escreve a mensagem na imagem que está presente no objecto lpi.
 	 */
 	private void escreveMensagem(LabPImage lpi, byte[] msgBytes, int column, int line) {
-		int red = -1;
 		int green = -1;
 		int blue = -1;
 		for (int i = 0; i < msgBytes.length; i++) {
-			red = lpi.getPixelRed(column, line);
 			green = lpi.getPixelGreen(column, line);
 			blue = lpi.getPixelBlue(column, line);
-			lpi.setPixelRGB(column, line, red ^ msgBytes[i], green, blue);
+			lpi.setPixelRGB(column, line, msgBytes[i], green, blue);
 			line++;
 		}
 	}
 
-	public LabPImage decifraImagem(/* LabPImage lpi, */String cifra, String filename)
-			throws IOException {
+	/**
+	 * Apply scanning of the cipher through the entire image. The inverse of XOR is
+	 * XOR itself. XOR is used in cryptography for two main reasons: it is
+	 * reversible e.g if A XOR with B results in C then A XOR with C will give B.
+	 * 
+	 * @param cifra
+	 * @param filename
+	 * @return
+	 * @throws IOException
+	 */
+	public LabPImage decifraImagem(String cifra, String filename) throws IOException {
 		LabPImage lpi = new LabPImage(filename);
-		scanCifrador(lpi, cifra);
+		aplicaCifra(lpi, cifra);
 		return lpi;
 	}
 
@@ -202,11 +215,55 @@ public class Cifra {
 	 * Percorre uma imagem e procura a mensagem escondida, de modo a que o receptor,
 	 * apenas na posse da chave, possa ser capaz de procurar a mensagem secreta.
 	 * 
+	 * @param lpi
 	 * @param cifra
-	 * @param filename
 	 */
-	public void decifraMensagem(String cifra, String filename) {
+	public String decifraMensagem(LabPImage lpi, String cifra) {
+		StringBuilder sb = new StringBuilder();
 
+		byte[] cifraBytes = cifra.getBytes();
+		boolean finish = false;
+		int matchCifra = 0;
+		boolean readingMessage = false;
+		int red = -1;
+		int c = 0;
+		while (c < lpi.getWidth() && !finish) {
+			int l = 0;
+			while (l < lpi.getHeight() && !finish) {
+				red = lpi.getPixelRed(c, l);
+				if (readingMessage) {
+					sb.append((char) red + "");
+					if (red == cifraBytes[matchCifra] && matchCifra < 4) {
+						matchCifra++;
+						if (matchCifra == 4) { // final da cifra final
+							finish = true;
+						}
+					}
+				} else {
+					if (red == cifraBytes[matchCifra] && matchCifra < 4) {
+						matchCifra++;
+						if (matchCifra == 4) { // final da cifra inicial
+							readingMessage = true;
+							matchCifra = 0;
+						}
+					} else {
+						matchCifra = 0;
+					}
+				}
+				l++;
+			}
+			c++;
+		}
+
+		return mensagemPura(sb.toString(), cifra);
+
+	}
+
+	/*
+	 * Remove a cifra do final da mensagem.
+	 */
+	private String mensagemPura(String msg, String cifra) {
+		return msg.length() > 0 ? msg.substring(0, msg.length() - cifra.length()) : "";
 	}
 
 	/**
