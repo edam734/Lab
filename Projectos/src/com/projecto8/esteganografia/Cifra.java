@@ -6,27 +6,66 @@ import java.util.Random;
 import edu.faculty.provided.LabPImage;
 
 /**
+ * O objectivo deste trabalho é desenvolver uma pequena ferramenta
+ * (SMS-LabPImage) capaz de gerar gráficos fractais e que possibilite ainda a
+ * cifragem/decifragem de uma mensagem de teste embutida numa imagem. Para tal
+ * recorre-se às funcionalidades da classe LabPImage e a técnicas de
+ * esteganografia para ocultar a existência de uma mensagem dentro de outra. Um
+ * exemplo básico da técnica de esteganografia poderá ser a alteração de um byte
+ * de uma das componentes de cor de alguns pixels de uma imagem colorida, de
+ * forma a que cada um destes passe a corresponder a um byte da mensagem secreta
+ * que queremos esconder na imagem. Desta forma, o receptor será capaz de
+ * enconrtar a mensagem secreta embutida na imagem, apenas se estiver na posse
+ * da chave numérica usada na cifra.
+ * 
+ * A aplicação a desenvolver, deverá começar por agregar a mensagem secreta com
+ * a chave numérica, devendo a chave numérica ser colocada no início e no final
+ * da mensagem. Seguidamente a frase resultante deverá ser escrita em pixels
+ * consecutivos de uma coluna da imagem definida aleatoriamente. A posição da
+ * coluna onde a frase começa a ser escrita também deverá ser definida
+ * aleatoriamente, devendo-se ter o cuidado de verificar se a frase cabe na
+ * coluna. Deste modo, será possível detectar o início e fim da mensagem. Os
+ * bytes da frase resultante deverão ser escritos na componente vermelha dos
+ * pixels. A mensagem secreta não deverá ter mais de 50 caracteres, enquanto que
+ * a chave numérica deverá ter entre 3 e 7 algarismos.
+ * 
+ * De forma a baralhar ainda mais o potencial “espião”, a imagem é ainda sujeita
+ * a uma cifra das várias componentes de cor dos pixels. Esta cifra é efectuada
+ * recorrendo à chave numérica anterior que, desta vez, assume o papel de
+ * semente para um gerador de números aleatórios permitindo gerar cores
+ * aleatórias para os pixels. Assim, apenas conhecendo a chave, será possível
+ * decifrar a imagem e recuperar a mensagem secreta.
+ * 
+ * Para que a imagem possa ser decifrada é necessário não perder a informação de
+ * cor da imagem inicial, para isso a cifra é implementada fazendo o “ou
+ * exclusivo” bit a bit (XOR – operador ^) das cores iniciais com o resultado do
+ * gerador de números aleatórios, excluindo desta operação apenas a componente
+ * vermelha dos pixels onde é escrito cada caracter da mensagem. Quando a cifra
+ * é feita desta forma, se aplicarmos o mesmo método de cifra à imagem cifrada,
+ * com os mesmos parâmetros usados para a cifra inicial, obtemos a imagem
+ * inicial (não cifrada), apenas alterada nos pixels onde a mensagem foi
+ * escrita.
+ * 
+ * No nosso caso, para criar a imagem inicial, será necessário desenhar vários
+ * fractais. Um fractal é uma imagem que contém elementos repetidos com escalas
+ * diferentes. O floco de neve de Koch e o conjunto de Mandelbrot são exemplos
+ * famosos de fractais. A nossa aplicação deverá desenhar quadrados recursivos
+ * como os representados na Figura 1. Nestes quadrados, em cada passo da
+ * recursão desenham-se outros quadrados centrados em cada um dos vértices do
+ * quadrado anterior e em cada passo o tamanho dos lados reduz-se a metade. A
+ * recursão termina quando se atinge o número de passos pretendido ou quando a
+ * dimensão do lado do quadrado for menor que 5 pixels. As linhas dos quadrados
+ * são vermelhas e os quadrados preenchidos com cores geradas aleatoriamente. O
+ * número de quadrados recursivos a desenhar deverá poder variar entre 3 e 7,
+ * enquanto que número de passos de recursão deverá poder variar entre 2 e 10. O
+ * lado máximo dos quadrados não poderá exceder 200 pixels. Além disto, não
+ * deverá ser desenhado nenhum quadrado que não caiba nos limites da imagem.
+ * 
  * 
  * @author Eduardo
  *
  */
 public class Cifra {
-
-//	public static final String OUTPUT_FOLDER = "outputs\\projecto8\\";
-//
-//	public static void main(String[] args) throws IOException {
-//		Cifra c = new Cifra();
-//		LabPImage lpi = c.geraFigura();
-//		String filename = "testeImagem21.png";
-//		c.escreveImagem(lpi, OUTPUT_FOLDER + filename);
-//		lpi = c.cifraImagem(lpi, "10Kg de batatas e uma caixa de morangos", "1234",
-//				OUTPUT_FOLDER + filename);
-//		c.escreveImagem(lpi, OUTPUT_FOLDER + "Cif_" + filename);
-//		LabPImage lpi2 = c.decifraImagem("1234", OUTPUT_FOLDER + "Cif_" + filename);
-//		c.escreveImagem(lpi2, OUTPUT_FOLDER + "Decif_" + filename);
-//		String mensagem = c.decifraMensagem(lpi2, "1234");
-//		System.out.println("A mensagem cifrada é = '" + mensagem + "'");
-//	}
 
 	private int generateRandomInt(Random rn, int max, int min) {
 		int num = rn.nextInt(max - min + 1) + min;
